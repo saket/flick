@@ -1,7 +1,8 @@
-package me.saket.binoculars
+package me.saket.binoculars.sample
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import me.saket.binoculars.R
 
 class MainActivity : AppCompatActivity() {
 
