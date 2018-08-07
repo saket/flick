@@ -151,7 +151,7 @@ class FlickGestureListener(viewConfiguration: ViewConfiguration) : View.OnTouchL
             val minSwipeDistanceForFling = view.height / 10
 
             if (yVelocityAbs > requiredYVelocity && yVelocityAbs < maximumFlingVelocity && distanceYAbs >= minSwipeDistanceForFling) {
-              // Fling detected!
+              // Flick detected!
               animateViewFlick(view, wasSwipedDownwards, 100)
 
             } else {
@@ -183,7 +183,7 @@ class FlickGestureListener(viewConfiguration: ViewConfiguration) : View.OnTouchL
         val isScrollingVertically = distanceYAbs > touchSlop && distanceYAbs > distanceXAbs
         val isScrollingHorizontally = distanceXAbs > touchSlop && distanceYAbs < distanceXAbs
 
-        // Avoid reading the gesture if the user is scrolling horizontally (like a ViewPager).
+        // Avoid registering a gesture if the user is scrolling horizontally (like a ViewPager).
         if (!verticalScrollRegistered && isScrollingHorizontally) {
           gestureCanceledUntilNextTouchDown = true
           return false
@@ -204,7 +204,7 @@ class FlickGestureListener(viewConfiguration: ViewConfiguration) : View.OnTouchL
             view.rotation = view.rotation + moveRatioDelta * (if (touchStartedOnLeftSide) -20F else 20F)
           }
 
-          // Send callback so that the background dim can be faded in/out.
+          // Send callback so that the background can be dimmed.
           dispatchOnPhotoMoveCallback(view)
 
           // Track the velocity so that we can later figure out if this View was fling'd (instead of dragged).

@@ -1,1 +1,1 @@
-include ':app', ':binoculars'
+include ':sample', ':binoculars'

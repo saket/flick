@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@+id/imageviewer_root"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/black_opacity_75"
+  android:orientation="vertical">
+
+  <me.saket.binoculars.FlickDismissLayout
+    android:id="@+id/imageviewer_image_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+      android:id="@+id/imageviewer_image"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      tools:ignore="ContentDescription" />
+  </me.saket.binoculars.FlickDismissLayout>
+</FrameLayout>

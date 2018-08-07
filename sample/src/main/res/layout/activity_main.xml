@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  tools:context="me.saket.binoculars.sample.MainActivity">
+
+  <android.support.v7.widget.Toolbar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:title="@string/app_name" />
+
+  <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="ContentDescription">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="2dp"
+      android:layout_marginStart="2dp"
+      android:layout_marginTop="4dp"
+      android:orientation="vertical">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+          android:id="@+id/image1"
+          style="@style/ImageThumbnail"
+          android:src="@color/gray_800" />
+
+        <ImageView
+          android:id="@+id/image2"
+          style="@style/ImageThumbnail"
+          android:src="@color/gray_800" />
+      </LinearLayout>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp">
+
+        <ImageView
+          android:id="@+id/image3"
+          style="@style/ImageThumbnail"
+          android:src="@color/gray_800" />
+
+        <ImageView
+          android:id="@+id/image4"
+          style="@style/ImageThumbnail"
+          android:src="@color/gray_800" />
+      </LinearLayout>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp">
+
+        <ImageView
+          android:id="@+id/image5"
+          style="@style/ImageThumbnail"
+          android:src="@color/gray_800" />
+
+        <ImageView
+          android:id="@+id/image6"
+          style="@style/ImageThumbnail"
+          android:src="@color/gray_800" />
+      </LinearLayout>
+    </LinearLayout>
+  </ScrollView>
+</LinearLayout>
