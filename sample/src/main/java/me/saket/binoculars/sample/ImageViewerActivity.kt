@@ -10,6 +10,7 @@ import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.support.v7.app.AppCompatActivity
 import android.view.ViewConfiguration
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ImageView
 import com.squareup.picasso.Picasso
 import kotterknife.bindView
@@ -34,6 +35,7 @@ class ImageViewerActivity : AppCompatActivity() {
   private lateinit var activityBackgroundDrawable: Drawable
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     super.onCreate(savedInstanceState)
     overridePendingTransition(0, 0)
     setContentView(R.layout.activity_image_viewer)
