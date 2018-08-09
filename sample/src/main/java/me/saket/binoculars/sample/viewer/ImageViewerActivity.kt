@@ -20,6 +20,7 @@ import me.saket.binoculars.FlickDismissLayout
 import me.saket.binoculars.FlickGestureListener
 import me.saket.binoculars.sample.R
 import me.saket.binoculars.sample.UnsplashPhoto
+import me.saket.binoculars.sample.viewer.immersive.SystemUiHelper
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 
@@ -40,16 +41,24 @@ class ImageViewerActivity : AppCompatActivity() {
   private val imageView by bindView<ZoomableGestureImageView>(R.id.imageviewer_image)
   private val flickDismissLayout by bindView<FlickDismissLayout>(R.id.imageviewer_image_container)
   private val progressView by bindView<View>(R.id.imageviewer_progress)
+
+  private lateinit var systemUiHelper: SystemUiHelper
   private lateinit var activityBackgroundDrawable: Drawable
 
   override fun onCreate(savedInstanceState: Bundle?) {
     window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+
     super.onCreate(savedInstanceState)
     overridePendingTransition(0, 0)
     setContentView(R.layout.activity_image_viewer)
 
     animateDimmingOnEntry()
     loadImage()
+
+    systemUiHelper = SystemUiHelper(this, SystemUiHelper.LEVEL_IMMERSIVE, 0, null)
+    imageView.setOnClickListener {
+      systemUiHelper.toggle()
+    }
 
     flickDismissLayout.setFlickGestureListener(flickGestureListener())
   }
