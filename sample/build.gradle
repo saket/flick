@@ -43,4 +43,5 @@ dependencies {
   implementation('com.squareup.picasso:picasso:2.71828') {
     exclude group: 'com.android.support'
   }
+  implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
 }

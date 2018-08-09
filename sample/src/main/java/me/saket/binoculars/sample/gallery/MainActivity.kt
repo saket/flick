@@ -1,10 +1,13 @@
-package me.saket.binoculars.sample
+package me.saket.binoculars.sample.gallery
 
 import android.os.Bundle
 import android.support.annotation.IdRes
 import android.support.v7.app.AppCompatActivity
 import android.widget.ImageView
 import com.squareup.picasso.Picasso
+import me.saket.binoculars.sample.R
+import me.saket.binoculars.sample.UnsplashPhoto
+import me.saket.binoculars.sample.viewer.ImageViewerActivity
 
 class MainActivity : AppCompatActivity() {
 

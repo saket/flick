@@ -13,7 +13,7 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme">
 
-    <activity android:name=".MainActivity">
+    <activity android:name=".gallery.MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
@@ -21,7 +21,7 @@
     </activity>
 
     <activity
-      android:name=".ImageViewerActivity"
+      android:name=".viewer.ImageViewerActivity"
       android:theme="@style/AppTheme.TransparentFullscreen" />
   </application>
 </manifest>

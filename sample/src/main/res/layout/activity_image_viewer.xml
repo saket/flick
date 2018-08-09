@@ -18,5 +18,11 @@
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       tools:ignore="ContentDescription" />
+
+    <ProgressBar
+      android:id="@+id/imageviewer_progress"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center" />
   </me.saket.binoculars.FlickDismissLayout>
 </FrameLayout>

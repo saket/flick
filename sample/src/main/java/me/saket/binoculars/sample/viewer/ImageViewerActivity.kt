@@ -1,4 +1,4 @@
-package me.saket.binoculars.sample
+package me.saket.binoculars.sample.viewer
 
 import android.animation.ObjectAnimator
 import android.content.Context
@@ -8,15 +8,25 @@ import android.os.Bundle
 import android.support.annotation.FloatRange
 import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
+import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
 import kotterknife.bindView
 import me.saket.binoculars.FlickDismissLayout
 import me.saket.binoculars.FlickGestureListener
+import me.saket.binoculars.sample.R
+import me.saket.binoculars.sample.UnsplashPhoto
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 
+// TODO: Reduce configuration for flick-dismiss-layout
+// TODO: Animate exit when back is pressed
+// TODO: Add zoom and pan
+// TODO: 1px padding.
 class ImageViewerActivity : AppCompatActivity() {
 
   companion object {
@@ -32,6 +42,7 @@ class ImageViewerActivity : AppCompatActivity() {
   private val rootLayout by bindView<ViewGroup>(R.id.imageviewer_root)
   private val imageView by bindView<ImageView>(R.id.imageviewer_image)
   private val flickDismissLayout by bindView<FlickDismissLayout>(R.id.imageviewer_image_container)
+  private val progressView by bindView<View>(R.id.imageviewer_progress)
   private lateinit var activityBackgroundDrawable: Drawable
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,13 +52,7 @@ class ImageViewerActivity : AppCompatActivity() {
     setContentView(R.layout.activity_image_viewer)
 
     animateDimmingOnEntry()
-
-    val unsplashPhoto = unsplashPhoto(intent)
-    val displayWidth = resources.displayMetrics.widthPixels
-
-    Picasso.get()
-        .load(unsplashPhoto.url(width = displayWidth))
-        .into(imageView)
+    loadImage()
 
     flickDismissLayout.setFlickGestureListener(flickGestureListener())
   }
@@ -61,9 +66,35 @@ class ImageViewerActivity : AppCompatActivity() {
     rootLayout.postDelayed({ finish() }, millis)
   }
 
+  private fun loadImage() {
+    val photo = unsplashPhoto(intent)
+    val displayWidth = resources.displayMetrics.widthPixels
+
+    val target = PicassoTargetWithEntryAnimation(imageView)
+    val targetWithProgress = PicassoTargetWithProgress(target, progressView)
+
+    val okHttpClient = OkHttpClient.Builder()
+        .apply {
+          val logging = HttpLoggingInterceptor()
+          logging.level = HttpLoggingInterceptor.Level.BASIC
+          addInterceptor(logging)
+        }
+        .build()
+
+    val picasso = Picasso.Builder(this)
+        .downloader(OkHttp3Downloader(okHttpClient))
+        .build()
+
+    picasso
+        .load(photo.url(width = displayWidth))
+        .into(targetWithProgress)
+
+    // Picasso keeps a weak reference to targets. Avoid getting them GCed.
+    imageView.setTag(R.id.picasso_target, targetWithProgress)
+  }
+
   private fun flickGestureListener(): FlickGestureListener {
     // TODO: Don't listen for flick gestures if the image can pan further.
-    // TODO: Reduce configuration required for flick gesture listener.
     //flickListener.setOnGestureInterceptor()
 
     return FlickGestureListener(ViewConfiguration.get(this)).apply {

@@ -5,7 +5,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical"
-  tools:context="me.saket.binoculars.sample.MainActivity">
+  tools:context="me.saket.binoculars.sample.gallery.MainActivity">
 
   <android.support.v7.widget.Toolbar
     android:layout_width="match_parent"
