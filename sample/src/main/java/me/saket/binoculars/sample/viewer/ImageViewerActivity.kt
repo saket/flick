@@ -24,7 +24,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 
 // TODO: Reduce configuration for flick-dismiss-layout
-// TODO: Animate exit when back is pressed
 // TODO: Add zoom and pan
 // TODO: 1px padding.
 class ImageViewerActivity : AppCompatActivity() {
@@ -60,6 +59,12 @@ class ImageViewerActivity : AppCompatActivity() {
   override fun finish() {
     super.finish()
     overridePendingTransition(0, 0)
+  }
+
+  override fun onBackPressed() {
+    animateExit {
+      super.onBackPressed()
+    }
   }
 
   private fun finishInMillis(millis: Long) {
@@ -130,8 +135,29 @@ class ImageViewerActivity : AppCompatActivity() {
     activityBackgroundDrawable = rootLayout.background.mutate()
     rootLayout.background = activityBackgroundDrawable
 
-    ObjectAnimator.ofFloat(1f, 0f).apply {
+    ObjectAnimator.ofFloat(1F, 0f).apply {
       duration = 600
+      interpolator = FastOutSlowInInterpolator()
+      addUpdateListener { animation ->
+        updateBackgroundDimmingAlpha(animation.animatedValue as Float)
+      }
+      start()
+    }
+  }
+
+  private fun animateExit(onEndAction: () -> Unit) {
+    val animDuration: Long = 200
+    flickDismissLayout.animate()
+        .alpha(0f)
+        .translationY(flickDismissLayout.height / 20F)
+        .rotation(-2F)
+        .setDuration(animDuration)
+        .setInterpolator(FastOutSlowInInterpolator())
+        .withEndAction(onEndAction)
+        .start()
+
+    ObjectAnimator.ofFloat(0F, 1F).apply {
+      duration = animDuration
       interpolator = FastOutSlowInInterpolator()
       addUpdateListener { animation ->
         updateBackgroundDimmingAlpha(animation.animatedValue as Float)
