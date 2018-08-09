@@ -3,6 +3,7 @@ package me.saket.binoculars.sample.viewer
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.annotation.FloatRange
@@ -25,7 +26,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 
 // TODO: Reduce configuration for flick-dismiss-layout
 // TODO: Add zoom and pan
-// TODO: 1px padding.
 class ImageViewerActivity : AppCompatActivity() {
 
   companion object {
@@ -90,8 +90,16 @@ class ImageViewerActivity : AppCompatActivity() {
         .downloader(OkHttp3Downloader(okHttpClient))
         .build()
 
+    // Adding a 1px transparent border improves anti-aliasing
+    // when rotating image (flick-dismiss).
+    val paddingTransformation = PicassoPaddingTransformation(
+        paddingPx = 1F,
+        paddingColor = Color.TRANSPARENT)
+
     picasso
         .load(photo.url(width = displayWidth))
+        .transform(paddingTransformation)
+        .priority(Picasso.Priority.HIGH)
         .into(targetWithProgress)
 
     // Picasso keeps a weak reference to targets. Avoid getting them GCed.
