@@ -12,10 +12,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <me.saket.binoculars.sample.viewer.ZoomableGestureImageView
       android:id="@+id/imageviewer_image"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="match_parent"
       android:layout_gravity="center"
       tools:ignore="ContentDescription" />
 

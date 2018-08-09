@@ -13,7 +13,6 @@ import android.view.View
 import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.ImageView
 import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
 import kotterknife.bindView
@@ -25,7 +24,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 
 // TODO: Reduce configuration for flick-dismiss-layout
-// TODO: Add zoom and pan
 class ImageViewerActivity : AppCompatActivity() {
 
   companion object {
@@ -39,7 +37,7 @@ class ImageViewerActivity : AppCompatActivity() {
   }
 
   private val rootLayout by bindView<ViewGroup>(R.id.imageviewer_root)
-  private val imageView by bindView<ImageView>(R.id.imageviewer_image)
+  private val imageView by bindView<ZoomableGestureImageView>(R.id.imageviewer_image)
   private val flickDismissLayout by bindView<FlickDismissLayout>(R.id.imageviewer_image_container)
   private val progressView by bindView<View>(R.id.imageviewer_progress)
   private lateinit var activityBackgroundDrawable: Drawable
@@ -91,7 +89,7 @@ class ImageViewerActivity : AppCompatActivity() {
         .build()
 
     // Adding a 1px transparent border improves anti-aliasing
-    // when rotating image (flick-dismiss).
+    // when the image rotates while being dragged.
     val paddingTransformation = PicassoPaddingTransformation(
         paddingPx = 1F,
         paddingColor = Color.TRANSPARENT)
@@ -107,11 +105,18 @@ class ImageViewerActivity : AppCompatActivity() {
   }
 
   private fun flickGestureListener(): FlickGestureListener {
-    // TODO: Don't listen for flick gestures if the image can pan further.
-    //flickListener.setOnGestureInterceptor()
-
     return FlickGestureListener(ViewConfiguration.get(this)).apply {
       setFlickThresholdSlop(FlickGestureListener.DEFAULT_FLICK_THRESHOLD)
+
+      // Don't listen for flick gestures if the image can pan further.
+      setOnGestureInterceptor(object : FlickGestureListener.OnGestureInterceptor {
+        override fun shouldIntercept(deltaY: Float): Boolean {
+          val isScrollingUpwards = deltaY < 0
+          val directionInt = if (isScrollingUpwards) -1 else +1
+          return imageView.canScrollVertically(directionInt)
+        }
+      })
+
       setGestureCallbacks(object : FlickGestureListener.GestureCallbacks {
         override fun onFlickDismissEnd(flickAnimationDuration: Long) {
           finishInMillis(200)
@@ -124,16 +129,14 @@ class ImageViewerActivity : AppCompatActivity() {
 
       setContentHeightProvider(object : FlickGestureListener.ContentHeightProvider {
         override val contentHeightForDismissAnimation: Int
-          get() = imageView.height
-        //get() = imageView.getZoomedImageHeight() as Int
+          get() = imageView.zoomedImageHeight.toInt()
 
         // A non-MATCH_PARENT height is important so that the user
         // can easily dismiss the image if it's taking too long to load.
         override val contentHeightForCalculatingThreshold: Int
           get() = when {
             imageView.drawable == null -> resources.getDimensionPixelSize(R.dimen.mediaalbumviewer_image_height_when_empty)
-            else -> imageView.height
-            //else -> imageView.getVisibleZoomedImageHeight() as Int
+            else -> imageView.visibleZoomedImageHeight.toInt()
           }
       })
     }
@@ -175,7 +178,8 @@ class ImageViewerActivity : AppCompatActivity() {
   }
 
   private fun updateBackgroundDimmingAlpha(@FloatRange(from = 0.0, to = 1.0) transparencyFactor: Float) {
-    // Increase dimming exponentially so that the background is fully transparent while the image has been moved by half.
+    // Increase dimming exponentially so that the background is
+    // fully transparent while the image has been moved by half.
     val dimming = 1f - Math.min(1f, transparencyFactor * 2)
     activityBackgroundDrawable.alpha = (dimming * 255).toInt()
   }

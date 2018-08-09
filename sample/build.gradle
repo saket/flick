@@ -44,4 +44,8 @@ dependencies {
     exclude group: 'com.android.support'
   }
   implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+
+  // Warning: Newer versions call requestDisallowInterceptTouchEvent() if the
+  // image is panned. This is not what FlickDismissLayout expects.
+  implementation 'com.alexvasilkov:gesture-views:2.2.0'
 }

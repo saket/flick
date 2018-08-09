@@ -29,6 +29,7 @@ class FlickDismissLayout(context: Context, attrs: AttributeSet) : FrameLayout(co
 
   override fun requestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
     super.requestDisallowInterceptTouchEvent(disallowIntercept)
+//    Exception().printStackTrace()
   }
 
   fun setFlickGestureListener(flickGestureListener: FlickGestureListener) {
