@@ -12,22 +12,22 @@ class PicassoTargetWithEntryAnimation(private val imageView: ImageView) : Target
 
   override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
 
-  override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
+  override fun onBitmapFailed(e: Exception, errorDrawable: Drawable?) {}
 
   override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
     imageView.apply {
       alpha = 0F
       translationY = bitmap.height / 20F
       rotation = -2F
-
-      imageView.setImageBitmap(bitmap)
-
-      imageView.animate()
-          .alpha(1F)
-          .translationY(0F)
-          .rotation(0F)
-          .setInterpolator(FlickGestureListener.ANIM_INTERPOLATOR)
-          .start()
     }
+
+    imageView.setImageBitmap(bitmap)
+
+    imageView.animate()
+        .alpha(1F)
+        .translationY(0F)
+        .rotation(0F)
+        .setInterpolator(FlickGestureListener.ANIM_INTERPOLATOR)
+        .start()
   }
 }

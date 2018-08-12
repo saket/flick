@@ -17,12 +17,12 @@ class PicassoTargetWithProgress(
     progressView.visibility = View.VISIBLE
   }
 
-  override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+  override fun onBitmapFailed(e: Exception, errorDrawable: Drawable?) {
     delegate.onBitmapFailed(e, errorDrawable)
     progressView.visibility = View.GONE
   }
 
-  override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+  override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
     delegate.onBitmapLoaded(bitmap, from)
     progressView.visibility = View.GONE
   }
