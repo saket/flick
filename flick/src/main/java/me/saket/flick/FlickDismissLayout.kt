@@ -9,7 +9,7 @@ import android.widget.FrameLayout
 /** A ViewGroup that can be dismissed by flicking it vertically. */
 class FlickDismissLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, attrs) {
 
-  var flickGestureListener: FlickGestureListener? = null
+  var gestureListener: FlickGestureListener? = null
 
   override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
     val intercepted = requireGestureListener().onTouch(this, ev)
@@ -25,9 +25,9 @@ class FlickDismissLayout(context: Context, attrs: AttributeSet) : FrameLayout(co
   }
 
   private fun requireGestureListener(): FlickGestureListener {
-    if (flickGestureListener == null) {
-      throw AssertionError("Did you forget to set flickGestureListener?")
+    if (gestureListener == null) {
+      throw AssertionError("Did you forget to set gestureListener?")
     }
-    return flickGestureListener!!
+    return gestureListener!!
   }
 }

@@ -53,7 +53,7 @@ class ImageViewerActivity : AppCompatActivity() {
     animateDimmingOnEntry()
     loadImage()
 
-    flickDismissLayout.flickGestureListener = flickGestureListener()
+    flickDismissLayout.gestureListener = flickGestureListener()
 
     systemUiHelper = SystemUiHelper(this, SystemUiHelper.LEVEL_IMMERSIVE, 0, null)
     imageView.setOnClickListener { systemUiHelper.toggle() }
@@ -113,7 +113,7 @@ class ImageViewerActivity : AppCompatActivity() {
           finishInMillis(flickAnimationDuration)
         }
 
-        override fun onMove(moveRatio: Float) {
+        override fun onMove(@FloatRange(from = -1.0, to = 1.0) moveRatio: Float) {
           updateBackgroundDimmingAlpha(Math.abs(moveRatio))
         }
       }
