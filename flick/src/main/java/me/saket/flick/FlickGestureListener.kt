@@ -16,12 +16,6 @@ class FlickGestureListener(viewConfiguration: ViewConfiguration) : View.OnTouchL
    */
   @FloatRange(from = 0.0, to = 1.0)
   var flickThresholdSlop = DEFAULT_FLICK_THRESHOLD
-    set(value) {
-      if ((value in 0F..1F).not()) {
-        throw AssertionError("Must be between 0F and 1F")
-      }
-      field = value
-    }
 
   /** Min. distance to move before registering a gesture. */
   private val touchSlop: Int = viewConfiguration.scaledTouchSlop
