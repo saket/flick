@@ -6,33 +6,28 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.FrameLayout
 
-/**
- * A ViewGroup that can be dismissed by flicking it in any direction.
- */
+/** A ViewGroup that can be dismissed by flicking it vertically. */
 class FlickDismissLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, attrs) {
 
-  // TODO: Make non-null.
-  private var flickGestureListener: FlickGestureListener? = null
+  var flickGestureListener: FlickGestureListener? = null
 
   override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
-    val intercepted = flickGestureListener!!.onTouch(this, ev)
+    val intercepted = requireGestureListener().onTouch(this, ev)
     return intercepted || super.onInterceptTouchEvent(ev)
   }
 
   @SuppressLint("ClickableViewAccessibility")
   override fun onTouchEvent(event: MotionEvent): Boolean {
-    flickGestureListener!!.onTouch(this, event)
-    // Defaulting to true to avoid letting
-    // parent ViewGroup receive any touch events.
+    requireGestureListener().onTouch(this, event)
+    // Defaulting to true to avoid letting parent ViewGroup receive any
+    // touch events. I don't remember why I added this behavior.
     return true
   }
 
-  override fun requestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
-    super.requestDisallowInterceptTouchEvent(disallowIntercept)
-//    Exception().printStackTrace()
-  }
-
-  fun setFlickGestureListener(flickGestureListener: FlickGestureListener) {
-    this.flickGestureListener = flickGestureListener
+  private fun requireGestureListener(): FlickGestureListener {
+    if (flickGestureListener == null) {
+      throw AssertionError("Did you forget to set flickGestureListener?")
+    }
+    return flickGestureListener!!
   }
 }

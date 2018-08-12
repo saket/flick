@@ -16,8 +16,11 @@ import android.view.WindowManager
 import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
 import kotterknife.bindView
+import me.saket.binoculars.ContentHeightProvider
 import me.saket.binoculars.FlickDismissLayout
 import me.saket.binoculars.FlickGestureListener
+import me.saket.binoculars.GestureCallbacks
+import me.saket.binoculars.OnGestureInterceptor
 import me.saket.binoculars.sample.R
 import me.saket.binoculars.sample.UnsplashPhoto
 import me.saket.binoculars.sample.viewer.immersive.SystemUiHelper
@@ -55,12 +58,10 @@ class ImageViewerActivity : AppCompatActivity() {
     animateDimmingOnEntry()
     loadImage()
 
-    systemUiHelper = SystemUiHelper(this, SystemUiHelper.LEVEL_IMMERSIVE, 0, null)
-    imageView.setOnClickListener {
-      systemUiHelper.toggle()
-    }
+    flickDismissLayout.flickGestureListener = flickGestureListener()
 
-    flickDismissLayout.setFlickGestureListener(flickGestureListener())
+    systemUiHelper = SystemUiHelper(this, SystemUiHelper.LEVEL_IMMERSIVE, 0, null)
+    imageView.setOnClickListener { systemUiHelper.toggle() }
   }
 
   override fun finish() {
@@ -115,39 +116,37 @@ class ImageViewerActivity : AppCompatActivity() {
 
   private fun flickGestureListener(): FlickGestureListener {
     return FlickGestureListener(ViewConfiguration.get(this)).apply {
-      setFlickThresholdSlop(FlickGestureListener.DEFAULT_FLICK_THRESHOLD)
-
-      // Don't listen for flick gestures if the image can pan further.
-      setOnGestureInterceptor(object : FlickGestureListener.OnGestureInterceptor {
+      onGestureInterceptor = object : OnGestureInterceptor {
         override fun shouldIntercept(deltaY: Float): Boolean {
+          // Don't listen for flick gestures if the image can pan further.
           val isScrollingUpwards = deltaY < 0
           val directionInt = if (isScrollingUpwards) -1 else +1
           return imageView.canScrollVertically(directionInt)
         }
-      })
+      }
 
-      setGestureCallbacks(object : FlickGestureListener.GestureCallbacks {
-        override fun onFlickDismissEnd(flickAnimationDuration: Long) {
-          finishInMillis(200)
+      gestureCallbacks = object : GestureCallbacks {
+        override fun onFlickDismissed(flickAnimationDuration: Long) {
+          finishInMillis(flickAnimationDuration)
         }
 
-        override fun onMoveMedia(moveRatio: Float) {
+        override fun onMove(moveRatio: Float) {
           updateBackgroundDimmingAlpha(Math.abs(moveRatio))
         }
-      })
+      }
 
-      setContentHeightProvider(object : FlickGestureListener.ContentHeightProvider {
-        override val contentHeightForDismissAnimation: Int
+      contentHeightProvider = object : ContentHeightProvider {
+        override val heightForDismissAnimation: Int
           get() = imageView.zoomedImageHeight.toInt()
 
         // A non-MATCH_PARENT height is important so that the user
         // can easily dismiss the image if it's taking too long to load.
-        override val contentHeightForCalculatingThreshold: Int
+        override val heightForCalculatingDismissThreshold: Int
           get() = when {
             imageView.drawable == null -> resources.getDimensionPixelSize(R.dimen.mediaalbumviewer_image_height_when_empty)
             else -> imageView.visibleZoomedImageHeight.toInt()
           }
-      })
+      }
     }
   }
 
