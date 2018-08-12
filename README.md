@@ -2,13 +2,13 @@
 
 ![Flick in action](https://github.com/saket/Flick/blob/master/screenshots/Flick.gif)
 
-Flick is a tiny library for flick dismissing images (or anything actually).
+Flick is a tiny library for flick dismissing images (or anything actually). You can read the announcement [blog post](http://saket.me/?p=707) to learn how Flick was created.
 
     implementation 'me.saket.flick:flick:1.0.0'
 
 ## Usage
 
-The sample app contains best practices for using Flick. You can also [download an APK from here](https://github.com/saket/Flick/releases) for testing it on your phone.
+The [sample project](https://github.com/saket/Flick/tree/master/sample/src/main/java/me/saket/flick/sample) contains best practices for using Flick. You can also [download an APK from here](https://github.com/saket/Flick/releases) for testing it on your phone.
 
 ```xml
 <me.saket.flick.FlickDismissLayout
