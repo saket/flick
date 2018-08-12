@@ -15,14 +15,14 @@ class PicassoTargetWithEntryAnimation(private val imageView: ImageView) : Target
   override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
 
   override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
-    imageView.alpha = 0f
-    imageView.translationY = (bitmap.height / 20).toFloat()
+    imageView.alpha = 0F
+    imageView.translationY = bitmap.height / 20F
     imageView.rotation = -2F
 
     imageView.setImageBitmap(bitmap)
 
     imageView.animate()
-        .alpha(1f)
+        .alpha(1F)
         .translationY(0F)
         .rotation(0F)
         .setInterpolator(FastOutSlowInInterpolator())

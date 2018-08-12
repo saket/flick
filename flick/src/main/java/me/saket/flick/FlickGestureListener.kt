@@ -66,9 +66,7 @@ class FlickGestureListener(viewConfiguration: ViewConfiguration) : View.OnTouchL
         downX = touchX
         downY = touchY
         touchStartedOnLeftSide = touchX < view.width / 2
-        if (velocityTracker == null) {
-          velocityTracker = VelocityTracker.obtain()
-        }
+        velocityTracker = VelocityTracker.obtain()
         velocityTracker!!.addMovement(event)
         return false
       }
@@ -102,7 +100,6 @@ class FlickGestureListener(viewConfiguration: ViewConfiguration) : View.OnTouchL
         }
 
         velocityTracker!!.recycle()
-        velocityTracker = null
         verticalScrollRegistered = false
         gestureInterceptedUntilNextTouchDown = false
         gestureCanceledUntilNextTouchDown = false
