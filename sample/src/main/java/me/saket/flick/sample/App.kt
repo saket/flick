@@ -1,4 +1,4 @@
-package me.saket.binoculars.sample
+package me.saket.flick.sample
 
 import android.app.Application
 import timber.log.Timber

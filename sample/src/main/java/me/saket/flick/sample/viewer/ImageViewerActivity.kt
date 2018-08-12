@@ -1,4 +1,4 @@
-package me.saket.binoculars.sample.viewer
+package me.saket.flick.sample.viewer
 
 import android.animation.ObjectAnimator
 import android.content.Context
@@ -15,14 +15,14 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import com.squareup.picasso.Picasso
 import kotterknife.bindView
-import me.saket.binoculars.ContentHeightProvider
-import me.saket.binoculars.FlickDismissLayout
-import me.saket.binoculars.FlickGestureListener
-import me.saket.binoculars.GestureCallbacks
-import me.saket.binoculars.OnGestureInterceptor
-import me.saket.binoculars.sample.R
-import me.saket.binoculars.sample.UnsplashPhoto
-import me.saket.binoculars.sample.viewer.immersive.SystemUiHelper
+import me.saket.flick.ContentHeightProvider
+import me.saket.flick.FlickDismissLayout
+import me.saket.flick.FlickGestureListener
+import me.saket.flick.GestureCallbacks
+import me.saket.flick.OnGestureInterceptor
+import me.saket.flick.sample.R
+import me.saket.flick.sample.UnsplashPhoto
+import me.saket.flick.sample.viewer.immersive.SystemUiHelper
 
 // TODO: Reduce configuration for flick-dismiss-layout
 class ImageViewerActivity : AppCompatActivity() {
@@ -140,7 +140,7 @@ class ImageViewerActivity : AppCompatActivity() {
     rootLayout.background = activityBackgroundDrawable
 
     ObjectAnimator.ofFloat(1F, 0f).apply {
-      duration = 600
+      duration = 200
       interpolator = FastOutSlowInInterpolator()
       addUpdateListener { animation ->
         updateBackgroundDimmingAlpha(animation.animatedValue as Float)

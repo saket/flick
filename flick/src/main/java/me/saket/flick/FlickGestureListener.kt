@@ -1,4 +1,4 @@
-package me.saket.binoculars
+package me.saket.flick
 
 import android.annotation.SuppressLint
 import android.support.annotation.FloatRange

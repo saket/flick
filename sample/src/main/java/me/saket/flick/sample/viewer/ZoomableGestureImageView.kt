@@ -1,4 +1,4 @@
-package me.saket.binoculars.sample.viewer
+package me.saket.flick.sample.viewer
 
 import android.annotation.SuppressLint
 import android.content.Context

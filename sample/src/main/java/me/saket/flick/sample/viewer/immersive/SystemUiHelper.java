@@ -1,4 +1,4 @@
-package me.saket.binoculars.sample.viewer.immersive;
+package me.saket.flick.sample.viewer.immersive;
 
 import android.app.Activity;
 import android.os.Handler;

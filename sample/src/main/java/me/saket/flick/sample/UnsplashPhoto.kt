@@ -1,4 +1,4 @@
-package me.saket.binoculars.sample
+package me.saket.flick.sample
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

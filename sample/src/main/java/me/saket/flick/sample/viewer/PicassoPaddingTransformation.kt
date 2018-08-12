@@ -1,4 +1,4 @@
-package me.saket.binoculars.sample.viewer
+package me.saket.flick.sample.viewer
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
