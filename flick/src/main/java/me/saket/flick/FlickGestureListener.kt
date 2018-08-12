@@ -79,7 +79,7 @@ class FlickGestureListener(viewConfiguration: ViewConfiguration) : View.OnTouchL
           val wasSwipedDownwards = distanceY > 0
 
           if (flickRegistered) {
-            animateViewFlick(view, wasSwipedDownwards)
+            animateDismissal(view, wasSwipedDownwards)
 
           } else {
             // Check if the View was fling'd and if the velocity + swipe distance is enough to dismiss.
@@ -92,7 +92,7 @@ class FlickGestureListener(viewConfiguration: ViewConfiguration) : View.OnTouchL
                 && distanceYAbs >= minSwipeDistanceForFling
                 && yVelocityAbs < maximumFlingVelocity) {
               // Flick detected!
-              animateViewFlick(view, wasSwipedDownwards, 100)
+              animateDismissal(view, wasSwipedDownwards, 100)
 
             } else {
               // Distance moved wasn't enough to dismiss.
@@ -176,11 +176,11 @@ class FlickGestureListener(viewConfiguration: ViewConfiguration) : View.OnTouchL
         .start()
   }
 
-  private fun animateViewFlick(view: View, downwards: Boolean) {
-    animateViewFlick(view, downwards, 200)
+  private fun animateDismissal(view: View, downwards: Boolean) {
+    animateDismissal(view, downwards, 200)
   }
 
-  private fun animateViewFlick(view: View, downwards: Boolean, flickAnimDuration: Long) {
+  private fun animateDismissal(view: View, downwards: Boolean, flickAnimDuration: Long) {
     if (view.pivotY != 0f) {
       throw AssertionError("Formula used for calculating distance rotated only works if the pivot is at (x,0")
     }
