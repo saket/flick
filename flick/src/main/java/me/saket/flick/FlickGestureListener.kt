@@ -217,7 +217,7 @@ class FlickGestureListener(viewConfiguration: ViewConfiguration) : View.OnTouchL
   }
 
   companion object {
-    private val ANIM_INTERPOLATOR = FastOutSlowInInterpolator()
+    val ANIM_INTERPOLATOR = FastOutSlowInInterpolator()
     const val DEFAULT_FLICK_THRESHOLD = 0.3f
   }
 }
