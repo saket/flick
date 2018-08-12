@@ -25,7 +25,7 @@ class ZoomableGestureImageView(context: Context, attrs: AttributeSet) : GestureI
   /**
    * Height of the image that is currently visible within this View's bounds.
    */
-  // Subtract the portion that has gone outside limits due to zooming in, because they are longer visible.
+  // Subtract the portion that has gone outside display bounds due to zooming in, because they are longer visible.
   val visibleZoomedImageHeight: Float
     get() {
       var zoomedImageHeight = zoomedImageHeight

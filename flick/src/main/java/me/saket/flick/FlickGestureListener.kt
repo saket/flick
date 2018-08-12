@@ -1,6 +1,7 @@
 package me.saket.flick
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.support.annotation.FloatRange
 import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.view.MotionEvent
@@ -8,7 +9,9 @@ import android.view.VelocityTracker
 import android.view.View
 import android.view.ViewConfiguration
 
-class FlickGestureListener(viewConfiguration: ViewConfiguration) : View.OnTouchListener {
+class FlickGestureListener(context: Context) : View.OnTouchListener {
+
+  private val viewConfiguration: ViewConfiguration = ViewConfiguration.get(context)
 
   /**
    * Minimum distance the user's finger should move (as a ratio to the View's

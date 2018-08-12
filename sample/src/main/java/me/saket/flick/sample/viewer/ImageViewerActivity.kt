@@ -10,7 +10,6 @@ import android.support.annotation.FloatRange
 import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.view.WindowManager
 import com.squareup.picasso.Picasso
@@ -99,7 +98,7 @@ class ImageViewerActivity : AppCompatActivity() {
   }
 
   private fun flickGestureListener(): FlickGestureListener {
-    return FlickGestureListener(ViewConfiguration.get(this)).apply {
+    return FlickGestureListener(this).apply {
       onGestureInterceptor = object : OnGestureInterceptor {
         override fun shouldIntercept(deltaY: Float): Boolean {
           // Don't listen for flick gestures if the image can pan further.
