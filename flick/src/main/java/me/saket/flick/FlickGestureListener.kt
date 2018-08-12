@@ -190,7 +190,7 @@ class FlickGestureListener(viewConfiguration: ViewConfiguration) : View.OnTouchL
     view.animate().cancel()
     view.animate()
         .translationY((if (downwards) throwDistance else -throwDistance).toFloat())
-        .withStartAction { gestureCallbacks().onFlickDismissed(flickAnimDuration) }
+        .withStartAction { gestureCallbacks().onFlickDismiss(flickAnimDuration) }
         .setDuration(flickAnimDuration)
         .setInterpolator(ANIM_INTERPOLATOR)
         .setUpdateListener { dispatchOnPhotoMoveCallback(view) }

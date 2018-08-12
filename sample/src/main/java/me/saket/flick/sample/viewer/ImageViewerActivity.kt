@@ -110,7 +110,7 @@ class ImageViewerActivity : AppCompatActivity() {
       }
 
       gestureCallbacks = object : GestureCallbacks {
-        override fun onFlickDismissed(flickAnimationDuration: Long) {
+        override fun onFlickDismiss(flickAnimationDuration: Long) {
           finishInMillis(flickAnimationDuration)
         }
 

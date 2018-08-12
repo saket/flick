@@ -10,7 +10,7 @@ interface GestureCallbacks {
    * @param flickAnimationDuration Time the Activity should wait to finish for
    * the flick animation to complete.
    */
-  fun onFlickDismissed(flickAnimationDuration: Long)
+  fun onFlickDismiss(flickAnimationDuration: Long)
 
   /**
    * Called while this View is being moved around.

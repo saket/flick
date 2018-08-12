@@ -19,15 +19,15 @@ class PicassoTargetWithEntryAnimation(private val imageView: ImageView) : Target
       alpha = 0F
       translationY = bitmap.height / 20F
       rotation = -2F
+
+      imageView.setImageBitmap(bitmap)
+
+      imageView.animate()
+          .alpha(1F)
+          .translationY(0F)
+          .rotation(0F)
+          .setInterpolator(FlickGestureListener.ANIM_INTERPOLATOR)
+          .start()
     }
-
-    imageView.setImageBitmap(bitmap)
-
-    imageView.animate()
-        .alpha(1F)
-        .translationY(0F)
-        .rotation(0F)
-        .setInterpolator(FlickGestureListener.ANIM_INTERPOLATOR)
-        .start()
   }
 }
