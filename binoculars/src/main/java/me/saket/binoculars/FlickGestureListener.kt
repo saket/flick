@@ -191,7 +191,7 @@ class FlickGestureListener(viewConfiguration: ViewConfiguration) : View.OnTouchL
       throw AssertionError("Formula used for calculating distance rotated only works if the pivot is at (x,0")
     }
 
-    // I no longer remember the reasoning behind applying so many Math functions. Help.
+    // I no longer remember the reason behind applying so many Math functions. Help.
     val rotationAngle = view.rotation
     val distanceRotated = Math.ceil(Math.abs(Math.sin(Math.toRadians(rotationAngle.toDouble())) * view.width / 2)).toInt()
     val throwDistance = distanceRotated + Math.max(contentHeightProvider().heightForDismissAnimation, view.rootView.height)

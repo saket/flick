@@ -13,7 +13,6 @@ import android.view.View
 import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.view.WindowManager
-import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
 import kotterknife.bindView
 import me.saket.binoculars.ContentHeightProvider
@@ -24,8 +23,6 @@ import me.saket.binoculars.OnGestureInterceptor
 import me.saket.binoculars.sample.R
 import me.saket.binoculars.sample.UnsplashPhoto
 import me.saket.binoculars.sample.viewer.immersive.SystemUiHelper
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 
 // TODO: Reduce configuration for flick-dismiss-layout
 class ImageViewerActivity : AppCompatActivity() {
@@ -86,25 +83,13 @@ class ImageViewerActivity : AppCompatActivity() {
     val target = PicassoTargetWithEntryAnimation(imageView)
     val targetWithProgress = PicassoTargetWithProgress(target, progressView)
 
-    val okHttpClient = OkHttpClient.Builder()
-        .apply {
-          val logging = HttpLoggingInterceptor()
-          logging.level = HttpLoggingInterceptor.Level.BASIC
-          addInterceptor(logging)
-        }
-        .build()
-
-    val picasso = Picasso.Builder(this)
-        .downloader(OkHttp3Downloader(okHttpClient))
-        .build()
-
     // Adding a 1px transparent border improves anti-aliasing
     // when the image rotates while being dragged.
     val paddingTransformation = PicassoPaddingTransformation(
         paddingPx = 1F,
         paddingColor = Color.TRANSPARENT)
 
-    picasso
+    Picasso.get()
         .load(photo.url(width = displayWidth))
         .transform(paddingTransformation)
         .priority(Picasso.Priority.HIGH)
@@ -139,8 +124,8 @@ class ImageViewerActivity : AppCompatActivity() {
         override val heightForDismissAnimation: Int
           get() = imageView.zoomedImageHeight.toInt()
 
-        // A non-MATCH_PARENT height is important so that the user
-        // can easily dismiss the image if it's taking too long to load.
+        // A positive height value is important so that the user
+        // can dismiss even while the progress indicator is visible.
         override val heightForCalculatingDismissThreshold: Int
           get() = when {
             imageView.drawable == null -> resources.getDimensionPixelSize(R.dimen.mediaalbumviewer_image_height_when_empty)
