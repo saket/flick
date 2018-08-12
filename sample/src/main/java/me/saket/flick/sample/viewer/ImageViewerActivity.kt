@@ -24,7 +24,6 @@ import me.saket.flick.sample.R
 import me.saket.flick.sample.UnsplashPhoto
 import me.saket.flick.sample.viewer.immersive.SystemUiHelper
 
-// TODO: Reduce configuration for flick-dismiss-layout
 class ImageViewerActivity : AppCompatActivity() {
 
   companion object {
