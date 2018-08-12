@@ -6,7 +6,6 @@ import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.widget.ImageView
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
-import timber.log.Timber
 import java.lang.Exception
 
 class PicassoTargetWithEntryAnimation(private val imageView: ImageView) : Target {
@@ -16,8 +15,6 @@ class PicassoTargetWithEntryAnimation(private val imageView: ImageView) : Target
   override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
 
   override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
-    Timber.i("Image loaded")
-
     imageView.alpha = 0f
     imageView.translationY = (bitmap.height / 20).toFloat()
     imageView.rotation = -2F
