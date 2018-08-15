@@ -11,7 +11,7 @@ import android.view.ViewConfiguration
 
 class FlickGestureListener(
     context: Context,
-    private val contentHeightProvider: ContentHeightProvider,
+    private val contentHeightProvider: ContentSizeProvider,
     private val gestureCallbacks: GestureCallbacks
 ) : View.OnTouchListener {
 

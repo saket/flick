@@ -1,6 +1,6 @@
 package me.saket.flick
 
-interface ContentHeightProvider {
+interface ContentSizeProvider {
 
   /**
    * Height of the content with its scale taken into account. This is used for

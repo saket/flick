@@ -14,7 +14,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import com.squareup.picasso.Picasso
 import kotterknife.bindView
-import me.saket.flick.ContentHeightProvider
+import me.saket.flick.ContentSizeProvider
 import me.saket.flick.FlickDismissLayout
 import me.saket.flick.FlickGestureListener
 import me.saket.flick.GestureCallbacks
@@ -98,7 +98,7 @@ class ImageViewerActivity : AppCompatActivity() {
   }
 
   private fun flickGestureListener(): FlickGestureListener {
-    val contentHeightProvider = object : ContentHeightProvider {
+    val contentHeightProvider = object : ContentSizeProvider {
       override val heightForDismissAnimation: Int
         get() = imageView.zoomedImageHeight.toInt()
 
