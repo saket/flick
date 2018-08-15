@@ -98,39 +98,39 @@ class ImageViewerActivity : AppCompatActivity() {
   }
 
   private fun flickGestureListener(): FlickGestureListener {
-    return FlickGestureListener(this).apply {
-      onGestureInterceptor = object : OnGestureInterceptor {
-        override fun shouldIntercept(deltaY: Float): Boolean {
-          // Don't listen for flick gestures if the image can pan further.
-          val isScrollingUpwards = deltaY < 0
-          val directionInt = if (isScrollingUpwards) -1 else +1
-          return imageView.canScrollVertically(directionInt)
+    val contentHeightProvider = object : ContentHeightProvider {
+      override val heightForDismissAnimation: Int
+        get() = imageView.zoomedImageHeight.toInt()
+
+      // A positive height value is important so that the user
+      // can dismiss even while the progress indicator is visible.
+      override val heightForCalculatingDismissThreshold: Int
+        get() = when {
+          imageView.drawable == null -> resources.getDimensionPixelSize(R.dimen.mediaalbumviewer_image_height_when_empty)
+          else -> imageView.visibleZoomedImageHeight.toInt()
         }
+    }
+
+    val gestureCallbacks = object : GestureCallbacks {
+      override fun onFlickDismiss(flickAnimationDuration: Long) {
+        finishInMillis(flickAnimationDuration)
       }
 
-      gestureCallbacks = object : GestureCallbacks {
-        override fun onFlickDismiss(flickAnimationDuration: Long) {
-          finishInMillis(flickAnimationDuration)
-        }
-
-        override fun onMove(@FloatRange(from = -1.0, to = 1.0) moveRatio: Float) {
-          updateBackgroundDimmingAlpha(Math.abs(moveRatio))
-        }
-      }
-
-      contentHeightProvider = object : ContentHeightProvider {
-        override val heightForDismissAnimation: Int
-          get() = imageView.zoomedImageHeight.toInt()
-
-        // A positive height value is important so that the user
-        // can dismiss even while the progress indicator is visible.
-        override val heightForCalculatingDismissThreshold: Int
-          get() = when {
-            imageView.drawable == null -> resources.getDimensionPixelSize(R.dimen.mediaalbumviewer_image_height_when_empty)
-            else -> imageView.visibleZoomedImageHeight.toInt()
-          }
+      override fun onMove(@FloatRange(from = -1.0, to = 1.0) moveRatio: Float) {
+        updateBackgroundDimmingAlpha(Math.abs(moveRatio))
       }
     }
+
+    val gestureListener = FlickGestureListener(this, contentHeightProvider, gestureCallbacks)
+    gestureListener.onGestureInterceptor = object : OnGestureInterceptor {
+      override fun shouldIntercept(deltaY: Float): Boolean {
+        // Don't listen for flick gestures if the image can pan further.
+        val isScrollingUpwards = deltaY < 0
+        val directionInt = if (isScrollingUpwards) -1 else +1
+        return imageView.canScrollVertically(directionInt)
+      }
+    }
+    return gestureListener
   }
 
   private fun animateDimmingOnEntry() {
