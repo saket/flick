@@ -9,7 +9,11 @@ import android.view.VelocityTracker
 import android.view.View
 import android.view.ViewConfiguration
 
-class FlickGestureListener(context: Context) : View.OnTouchListener {
+class FlickGestureListener(
+    context: Context,
+    private val contentHeightProvider: ContentHeightProvider,
+    private val gestureCallbacks: GestureCallbacks
+) : View.OnTouchListener {
 
   private val viewConfiguration: ViewConfiguration = ViewConfiguration.get(context)
 
@@ -27,8 +31,6 @@ class FlickGestureListener(context: Context) : View.OnTouchListener {
   private val maximumFlingVelocity: Int = viewConfiguration.scaledMaximumFlingVelocity
 
   var onGestureInterceptor: OnGestureInterceptor = OnGestureInterceptor.Default()
-  var gestureCallbacks: GestureCallbacks? = null
-  var contentHeightProvider: ContentHeightProvider? = null
 
   private var downX = 0F
   private var downY = 0F
@@ -161,7 +163,7 @@ class FlickGestureListener(context: Context) : View.OnTouchListener {
 
   private fun dispatchOnPhotoMoveCallback(view: View) {
     val moveRatio = view.translationY / view.height
-    gestureCallbacks().onMove(moveRatio)
+    gestureCallbacks.onMove(moveRatio)
   }
 
   private fun animateViewBackToPosition(view: View) {
@@ -188,12 +190,12 @@ class FlickGestureListener(context: Context) : View.OnTouchListener {
     // I no longer remember the reason behind applying so many Math functions. Help.
     val rotationAngle = view.rotation
     val distanceRotated = Math.ceil(Math.abs(Math.sin(Math.toRadians(rotationAngle.toDouble())) * view.width / 2)).toInt()
-    val throwDistance = distanceRotated + Math.max(contentHeightProvider().heightForDismissAnimation, view.rootView.height)
+    val throwDistance = distanceRotated + Math.max(contentHeightProvider.heightForDismissAnimation, view.rootView.height)
 
     view.animate().cancel()
     view.animate()
         .translationY((if (downwards) throwDistance else -throwDistance).toFloat())
-        .withStartAction { gestureCallbacks().onFlickDismiss(flickAnimDuration) }
+        .withStartAction { gestureCallbacks.onFlickDismiss(flickAnimDuration) }
         .setDuration(flickAnimDuration)
         .setInterpolator(ANIM_INTERPOLATOR)
         .setUpdateListener { dispatchOnPhotoMoveCallback(view) }
@@ -201,22 +203,8 @@ class FlickGestureListener(context: Context) : View.OnTouchListener {
   }
 
   private fun hasFingerMovedEnoughToFlick(distanceYAbs: Float): Boolean {
-    val thresholdDistanceY = contentHeightProvider().heightForCalculatingDismissThreshold * flickThresholdSlop
+    val thresholdDistanceY = contentHeightProvider.heightForCalculatingDismissThreshold * flickThresholdSlop
     return distanceYAbs > thresholdDistanceY
-  }
-
-  private fun gestureCallbacks(): GestureCallbacks {
-    if (gestureCallbacks == null) {
-      throw AssertionError("Did you forget to set gestureCallbacks?")
-    }
-    return gestureCallbacks!!
-  }
-
-  private fun contentHeightProvider(): ContentHeightProvider {
-    if (contentHeightProvider == null) {
-      throw AssertionError("Did you forget to set contentHeightProvider?")
-    }
-    return contentHeightProvider!!
   }
 
   companion object {
