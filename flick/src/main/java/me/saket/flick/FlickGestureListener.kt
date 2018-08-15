@@ -12,7 +12,7 @@ import android.view.ViewConfiguration
 class FlickGestureListener(
     context: Context,
     private val contentHeightProvider: ContentSizeProvider,
-    private val gestureCallbacks: GestureCallbacks
+    private val flickCallbacks: FlickCallbacks
 ) : View.OnTouchListener {
 
   private val viewConfiguration: ViewConfiguration = ViewConfiguration.get(context)
@@ -163,7 +163,7 @@ class FlickGestureListener(
 
   private fun dispatchOnPhotoMoveCallback(view: View) {
     val moveRatio = view.translationY / view.height
-    gestureCallbacks.onMove(moveRatio)
+    flickCallbacks.onMove(moveRatio)
   }
 
   private fun animateViewBackToPosition(view: View) {
@@ -195,7 +195,7 @@ class FlickGestureListener(
     view.animate().cancel()
     view.animate()
         .translationY((if (downwards) throwDistance else -throwDistance).toFloat())
-        .withStartAction { gestureCallbacks.onFlickDismiss(flickAnimDuration) }
+        .withStartAction { flickCallbacks.onFlickDismiss(flickAnimDuration) }
         .setDuration(flickAnimDuration)
         .setInterpolator(ANIM_INTERPOLATOR)
         .setUpdateListener { dispatchOnPhotoMoveCallback(view) }
