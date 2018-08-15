@@ -14,8 +14,8 @@ android {
     applicationId "me.saket.flick.sample"
     minSdkVersion versions.minSdk
     targetSdkVersion versions.compileSdk
-    versionCode versions.libraryVersionCode
-    versionName versions.libraryVersionName
+    versionCode 3
+    versionName '1.2.0'
   }
 
   buildTypes {
@@ -34,7 +34,7 @@ android {
 }
 
 dependencies {
-  implementation project(path: ':flick')
+  implementation 'me.saket:flick:1.2.0'
 
   implementation "com.android.support:appcompat-v7:$versions.supportLib"
   implementation "com.android.support:recyclerview-v7:$versions.supportLib"

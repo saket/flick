@@ -7,8 +7,6 @@ buildscript {
       supportLib          : '27.1.1',
       timber              : '4.7.0',
       kotlin              : '1.2.60',
-      'libraryVersionName': '1.2.0',
-      'libraryVersionCode': 3,
   ]
 
   repositories {
@@ -25,6 +23,7 @@ buildscript {
 allprojects {
   repositories {
     google()
+    mavenCentral()
     jcenter()
   }
 }

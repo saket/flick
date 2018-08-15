@@ -1,6 +1,16 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'com.vanniktech:gradle-maven-publish-plugin:0.4.0'
+  }
+}
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: "com.vanniktech.maven.publish"
 
 android {
   compileSdkVersion versions.compileSdk
@@ -9,8 +19,6 @@ android {
   defaultConfig {
     minSdkVersion versions.minSdk
     targetSdkVersion versions.compileSdk
-    versionCode versions.libraryVersionCode
-    versionName versions.libraryVersionName
   }
 
   buildTypes {
@@ -23,4 +31,9 @@ android {
 dependencies {
   implementation "com.android.support:appcompat-v7:$versions.supportLib"
   compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
+}
+
+mavenPublish {
+  releaseRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+  snapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
 }
