@@ -34,7 +34,7 @@ android {
 }
 
 dependencies {
-  implementation 'me.saket:flick:1.2.0'
+  implementation project(path: ':flick')
 
   implementation "com.android.support:appcompat-v7:$versions.supportLib"
   implementation "com.android.support:recyclerview-v7:$versions.supportLib"
