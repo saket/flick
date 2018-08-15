@@ -2,7 +2,7 @@ package me.saket.flick
 
 import android.support.annotation.FloatRange
 
-interface GestureCallbacks {
+interface FlickCallbacks {
 
   /**
    * Called when the View has been flicked and the Activity should be dismissed.

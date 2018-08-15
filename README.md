@@ -24,7 +24,7 @@ The [sample project](https://github.com/saket/Flick/tree/master/sample/src/main/
 Flick requires you to manually provide the content dimensions instead of it checking the content's height. This is useful for scalable `ImageViews`, where the height will always be set to match-parent, but the actual image may not be consuming the entire height.
 
 ```kotlin
-val contentHeightProvider = object : ContentHeightProvider {
+val contentSizeProvider = object : ContentSizeProvider {
   override val heightForDismissAnimation: Int
     get() = imageView.drawable * imageView.zoomRatio
 
@@ -36,7 +36,7 @@ val contentHeightProvider = object : ContentHeightProvider {
     }
 }
 
-val callbacks = object : GestureCallbacks {
+val callbacks = object : FlickCallbacks {
   override fun onFlickDismiss(animationDuration: Long) {
     // Called when the View has been flicked and the Activity
     // should be dismissed.
@@ -49,6 +49,7 @@ val callbacks = object : GestureCallbacks {
   }
 }
 
+val flickDismissLayout: FlickDismissLayout = findViewById(...)
 flickDismissLayout.gestureListener = FlickGestureListener(context, contentSizeProvider, callbacks)
 ```
 

@@ -15,9 +15,9 @@ import android.view.WindowManager
 import com.squareup.picasso.Picasso
 import kotterknife.bindView
 import me.saket.flick.ContentSizeProvider
+import me.saket.flick.FlickCallbacks
 import me.saket.flick.FlickDismissLayout
 import me.saket.flick.FlickGestureListener
-import me.saket.flick.GestureCallbacks
 import me.saket.flick.OnGestureInterceptor
 import me.saket.flick.sample.R
 import me.saket.flick.sample.UnsplashPhoto
@@ -111,7 +111,7 @@ class ImageViewerActivity : AppCompatActivity() {
         }
     }
 
-    val gestureCallbacks = object : GestureCallbacks {
+    val callbacks = object : FlickCallbacks {
       override fun onFlickDismiss(flickAnimationDuration: Long) {
         finishInMillis(flickAnimationDuration)
       }
@@ -121,7 +121,7 @@ class ImageViewerActivity : AppCompatActivity() {
       }
     }
 
-    val gestureListener = FlickGestureListener(this, contentHeightProvider, gestureCallbacks)
+    val gestureListener = FlickGestureListener(this, contentHeightProvider, callbacks)
     gestureListener.onGestureInterceptor = object : OnGestureInterceptor {
       override fun shouldIntercept(deltaY: Float): Boolean {
         // Don't listen for flick gestures if the image can pan further.
