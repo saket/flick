@@ -24,25 +24,19 @@ The [sample project](https://github.com/saket/Flick/tree/master/sample/src/main/
 Flick requires you to manually provide the content dimensions instead of it checking the content's height. This is useful for scalable `ImageViews`, where the height will always be set to match-parent, but the actual image may not be consuming the entire height.
 
 ```kotlin
-flickDismissLayout.gestureListener = FlickGestureListener(context).apply {
-  contentHeightProvider = object : ContentHeightProvider {
-    override val heightForDismissAnimation: Int
-      get() = imageView.drawable * imageView.zoomRatio
+val contentHeightProvider = object : ContentHeightProvider {
+  override val heightForDismissAnimation: Int
+    get() = imageView.drawable * imageView.zoomRatio
 
-    override val heightForCalculatingDismissThreshold: Int
-      get() {
-        // Zoomed in height minus the portions of image that has gone
-        // outside display bounds, because they are longer visible.
-        imageView.visibleZoomedImageHeight
-      }
+  override val heightForCalculatingDismissThreshold: Int
+    get() {
+      // Zoomed in height minus the portions of image that has gone
+      // outside display bounds, because they are longer visible.
+      imageView.visibleZoomedImageHeight
     }
 }
-```
 
-Flick offers two callbacks for receiving updates of gestures.
-
-```kotlin
-gestureListener.gestureCallbacks = object : GestureCallbacks {
+val callbacks = object : GestureCallbacks {
   override fun onFlickDismiss(animationDuration: Long) {
     // Called when the View has been flicked and the Activity
     // should be dismissed.
@@ -54,6 +48,8 @@ gestureListener.gestureCallbacks = object : GestureCallbacks {
     // background dimming is a good usecase for this callback.
   }
 }
+
+flickDismissLayout.gestureListener = FlickGestureListener(context, contentSizeProvider, callbacks)
 ```
 
 ## License
