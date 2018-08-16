@@ -38,7 +38,7 @@ class FlickGestureListener(
    * [scrollY]: Distance moved since touch-down. Small, but sufficient for
    * checking the direction of scroll.
    */
-  var onGestureInterceptor: (scrollY: Float) -> InterceptResult = { InterceptResult.IGNORED }
+  var gestureInterceptor: (scrollY: Float) -> InterceptResult = { InterceptResult.IGNORED }
 
   private var downX = 0F
   private var downY = 0F
@@ -125,7 +125,7 @@ class FlickGestureListener(
         }
 
         // The listener only gets once chance to block the flick -- only if it's not already being moved.
-        if (verticalScrollRegistered.not() && onGestureInterceptor(distanceY) == INTERCEPTED) {
+        if (verticalScrollRegistered.not() && gestureInterceptor(distanceY) == INTERCEPTED) {
           gestureInterceptedUntilNextTouchDown = true
           return false
         }
