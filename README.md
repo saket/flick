@@ -8,7 +8,7 @@ Flick is a tiny library for flick dismissing images (or anything actually). You 
 
 ## Usage
 
-The [sample project](https://github.com/saket/Flick/tree/master/sample/src/main/java/me/saket/flick/sample) contains best practices for using Flick. You can also [download an APK from here](https://github.com/saket/Flick/releases) for testing it on your phone.
+The [sample project](https://github.com/saket/Flick/tree/master/sample/src/main/java/me/saket/flick/sample) contains best practices for using Flick. You can [download the APK from here](https://github.com/saket/Flick/releases) for testing it on your phone.
 
 ```xml
 <me.saket.flick.FlickDismissLayout
@@ -59,7 +59,7 @@ In usecases where the content can be scrolled further in the direction of the ge
 
 ```kotlin
 // Block flick gestures if the image can pan further.
-gestureListener.onGestureInterceptor = { scrollY ->
+gestureListener.gestureInterceptor = { scrollY ->
   val isScrollingUpwards = scrollY < 0
   val directionInt = if (isScrollingUpwards) -1 else +1
   val canPanFurther = imageView.canScrollVertically(directionInt)

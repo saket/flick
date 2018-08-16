@@ -126,7 +126,7 @@ class ImageViewerActivity : AppCompatActivity() {
     val gestureListener = FlickGestureListener(this, contentHeightProvider, callbacks)
 
     // Block flick gestures if the image can pan further.
-    gestureListener.onGestureInterceptor = { scrollY ->
+    gestureListener.gestureInterceptor = { scrollY ->
       val isScrollingUpwards = scrollY < 0
       val directionInt = if (isScrollingUpwards) -1 else +1
       val canPanFurther = imageView.canScrollVertically(directionInt)
