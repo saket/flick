@@ -1,6 +1,6 @@
 # Flick
 
-![Flick in action](https://github.com/saket/Flick/blob/master/screenshots/Flick.gif)
+![Flick in action](https://github.com/saket/Flick/blob/master/screenshots/flick_demo.gif)
 
 Flick is a tiny library for flick dismissing images (or anything actually). You can read the announcement [blog post](http://saket.me/?p=707) to learn how Flick was created.
 
