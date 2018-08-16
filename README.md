@@ -25,15 +25,15 @@ Flick requires you to manually provide the content dimensions instead of it chec
 
 ```kotlin
 val contentSizeProvider = object : ContentSizeProvider {
-  override val heightForDismissAnimation: Int
-    get() = imageView.drawable * imageView.zoomRatio
+  override fun heightForDismissAnimation(): Int {
+    return imageView.zoomedImageHeight.toInt()
+  }
 
-  override val heightForCalculatingDismissThreshold: Int
-    get() {
-      // Zoomed in height minus the portions of image that has gone
-      // outside display bounds, because they are longer visible.
-      imageView.visibleZoomedImageHeight
-    }
+  override fun heightForCalculatingDismissThreshold(): Int {
+    // Zoomed in height minus the portions of image that has gone
+    // outside display bounds, because they are longer visible.
+    imageView.visibleZoomedImageHeight
+  }
 }
 
 val callbacks = object : FlickCallbacks {
