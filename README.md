@@ -53,6 +53,24 @@ val flickDismissLayout: FlickDismissLayout = findViewById(...)
 flickDismissLayout.gestureListener = FlickGestureListener(context, contentSizeProvider, callbacks)
 ```
 
+**Intercepting flicks**
+
+In usecases where the content can be scrolled further in the direction of the gesture, Flick also exposes a way for intercepting flick detection,
+
+```kotlin
+// Block flick gestures if the image can pan further.
+gestureListener.onGestureInterceptor = { scrollY ->
+  val isScrollingUpwards = scrollY < 0
+  val directionInt = if (isScrollingUpwards) -1 else +1
+  val canPanFurther = imageView.canScrollVertically(directionInt)
+
+  when {
+    canPanFurther -> InterceptResult.INTERCEPTED
+    else -> InterceptResult.IGNORED
+  }
+}
+```
+
 ## License
 
 ```
