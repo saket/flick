@@ -198,7 +198,7 @@ class FlickGestureListener(
     // I no longer remember the reason behind applying so many Math functions. Help.
     val rotationAngle = view.rotation
     val distanceRotated = Math.ceil(Math.abs(Math.sin(Math.toRadians(rotationAngle.toDouble())) * view.width / 2)).toInt()
-    val throwDistance = distanceRotated + Math.max(contentHeightProvider.heightForDismissAnimation, view.rootView.height)
+    val throwDistance = distanceRotated + Math.max(contentHeightProvider.heightForDismissAnimation(), view.rootView.height)
 
     view.animate().cancel()
     view.animate()
@@ -211,7 +211,7 @@ class FlickGestureListener(
   }
 
   private fun hasFingerMovedEnoughToFlick(distanceYAbs: Float): Boolean {
-    val thresholdDistanceY = contentHeightProvider.heightForCalculatingDismissThreshold * flickThresholdSlop
+    val thresholdDistanceY = contentHeightProvider.heightForCalculatingDismissThreshold() * flickThresholdSlop
     return distanceYAbs > thresholdDistanceY
   }
 

@@ -99,16 +99,18 @@ class ImageViewerActivity : AppCompatActivity() {
 
   private fun flickGestureListener(): FlickGestureListener {
     val contentHeightProvider = object : ContentSizeProvider {
-      override val heightForDismissAnimation: Int
-        get() = imageView.zoomedImageHeight.toInt()
+      override fun heightForDismissAnimation(): Int {
+        return imageView.zoomedImageHeight.toInt()
+      }
 
       // A positive height value is important so that the user
       // can dismiss even while the progress indicator is visible.
-      override val heightForCalculatingDismissThreshold: Int
-        get() = when {
+      override fun heightForCalculatingDismissThreshold(): Int {
+        return when {
           imageView.drawable == null -> resources.getDimensionPixelSize(R.dimen.mediaalbumviewer_image_height_when_empty)
           else -> imageView.visibleZoomedImageHeight.toInt()
         }
+      }
     }
 
     val callbacks = object : FlickCallbacks {
