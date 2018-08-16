@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.view.View
 import android.view.ViewConfiguration
+import me.saket.flick.InterceptResult.INTERCEPTED
 
 class FlickGestureListener(
     context: Context,
@@ -30,7 +31,14 @@ class FlickGestureListener(
   /** Px per second. */
   private val maximumFlingVelocity: Int = viewConfiguration.scaledMaximumFlingVelocity
 
-  var onGestureInterceptor: OnGestureInterceptor = OnGestureInterceptor.Default()
+  /**
+   * Called once every-time a scroll gesture is registered. When intercepted, gesture
+   * detection is skipped until the next touch-down.
+   *
+   * [scrollY]: Distance moved since touch-down. Small, but sufficient for
+   * checking the direction of scroll.
+   */
+  var onGestureInterceptor: (scrollY: Float) -> InterceptResult = { InterceptResult.IGNORED }
 
   private var downX = 0F
   private var downY = 0F
@@ -117,7 +125,7 @@ class FlickGestureListener(
         }
 
         // The listener only gets once chance to block the flick -- only if it's not already being moved.
-        if (verticalScrollRegistered.not() && onGestureInterceptor.shouldIntercept(deltaY)) {
+        if (verticalScrollRegistered.not() && onGestureInterceptor(distanceY) == INTERCEPTED) {
           gestureInterceptedUntilNextTouchDown = true
           return false
         }

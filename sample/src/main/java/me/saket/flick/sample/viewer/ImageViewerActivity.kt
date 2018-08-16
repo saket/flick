@@ -18,7 +18,7 @@ import me.saket.flick.ContentSizeProvider
 import me.saket.flick.FlickCallbacks
 import me.saket.flick.FlickDismissLayout
 import me.saket.flick.FlickGestureListener
-import me.saket.flick.OnGestureInterceptor
+import me.saket.flick.InterceptResult
 import me.saket.flick.sample.R
 import me.saket.flick.sample.UnsplashPhoto
 import me.saket.flick.sample.viewer.immersive.SystemUiHelper
@@ -122,14 +122,19 @@ class ImageViewerActivity : AppCompatActivity() {
     }
 
     val gestureListener = FlickGestureListener(this, contentHeightProvider, callbacks)
-    gestureListener.onGestureInterceptor = object : OnGestureInterceptor {
-      override fun shouldIntercept(deltaY: Float): Boolean {
-        // Don't listen for flick gestures if the image can pan further.
-        val isScrollingUpwards = deltaY < 0
-        val directionInt = if (isScrollingUpwards) -1 else +1
-        return imageView.canScrollVertically(directionInt)
+
+    // Block flick gestures if the image can pan further.
+    gestureListener.onGestureInterceptor = { scrollY ->
+      val isScrollingUpwards = scrollY < 0
+      val directionInt = if (isScrollingUpwards) -1 else +1
+      val canPanFurther = imageView.canScrollVertically(directionInt)
+
+      when {
+        canPanFurther -> InterceptResult.INTERCEPTED
+        else -> InterceptResult.IGNORED
       }
     }
+
     return gestureListener
   }
 
