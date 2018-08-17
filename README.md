@@ -4,11 +4,13 @@
 
 Flick is a tiny library for flick dismissing images (or anything actually). You can read the announcement [blog post](http://saket.me/?p=707) to learn how Flick was created.
 
-    implementation 'me.saket:flick:1.3.0'
+```
+implementation 'me.saket:flick:1.3.0'
+```
 
 ## Usage
 
-The [sample project](https://github.com/saket/Flick/tree/master/sample/src/main/java/me/saket/flick/sample) contains best practices for using Flick. You can [download the APK from here](https://github.com/saket/Flick/releases) for testing it on your phone.
+The [sample project](https://github.com/saket/Flick/tree/master/sample/src/main/java/me/saket/flick/sample) contains best practices for using Flick. You can [download its APK from here](https://github.com/saket/Flick/releases) for trying it out on your phone.
 
 ```xml
 <me.saket.flick.FlickDismissLayout
@@ -21,21 +23,9 @@ The [sample project](https://github.com/saket/Flick/tree/master/sample/src/main/
 </me.saket.flick.FlickDismissLayout>
 ```
 
-Flick requires you to manually provide the content dimensions instead of it checking the content's height. This is useful for scalable `ImageViews`, where the height will always be set to match-parent, but the actual image may not be consuming the entire height.
+Flick requires you to manually provide the content dimensions instead of it relying on the content View's dimensions. This is useful for scalable `ImageViews`, where the height will always be set to match-parent, but the actual image may or may not be consuming the entire space.
 
 ```kotlin
-val contentSizeProvider = object : ContentSizeProvider {
-  override fun heightForDismissAnimation(): Int {
-    return imageView.zoomedImageHeight.toInt()
-  }
-
-  override fun heightForCalculatingDismissThreshold(): Int {
-    // Zoomed in height minus the portions of image that has gone
-    // outside display bounds, because they are longer visible.
-    imageView.visibleZoomedImageHeight
-  }
-}
-
 val callbacks = object : FlickCallbacks {
   override fun onFlickDismiss(animationDuration: Long) {
     // Called when the View has been flicked and the Activity
@@ -49,13 +39,25 @@ val callbacks = object : FlickCallbacks {
   }
 }
 
+val contentSizeProvider = object : ContentSizeProvider {
+  override fun heightForDismissAnimation(): Int {
+    return imageView.zoomedImageHeight.toInt()
+  }
+
+  override fun heightForCalculatingDismissThreshold(): Int {
+    // Zoomed in height minus the portions of image that has gone
+    // outside display bounds, because they are longer visible.
+    imageView.visibleZoomedImageHeight
+  }
+}
+
 val flickDismissLayout: FlickDismissLayout = findViewById(...)
 flickDismissLayout.gestureListener = FlickGestureListener(context, contentSizeProvider, callbacks)
 ```
 
 **Intercepting flicks**
 
-In usecases where the content can be scrolled further in the direction of the gesture, Flick also exposes a way for intercepting flick detection,
+For usecases where the content can be scrolled further in the direction of the gesture, Flick exposes a way for intercepting flick detection,
 
 ```kotlin
 // Block flick gestures if the image can pan further.
