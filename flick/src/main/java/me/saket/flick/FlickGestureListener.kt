@@ -216,7 +216,10 @@ class FlickGestureListener(
   }
 
   companion object {
+
+    @JvmField
     val ANIM_INTERPOLATOR = FastOutSlowInInterpolator()
+
     const val DEFAULT_FLICK_THRESHOLD = 0.3f
   }
 }
