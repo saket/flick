@@ -48,5 +48,6 @@ dependencies {
   }
   // Warning: Newer versions call requestDisallowInterceptTouchEvent() if the
   // image is panned. This is not what FlickDismissLayout expects.
+  //noinspection GradleDependency
   implementation 'com.alexvasilkov:gesture-views:2.2.0'
 }
