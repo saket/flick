@@ -9,11 +9,16 @@ import android.view.VelocityTracker
 import android.view.View
 import android.view.ViewConfiguration
 import me.saket.flick.InterceptResult.INTERCEPTED
+import java.lang.Math.toRadians
+import kotlin.math.abs
+import kotlin.math.ceil
+import kotlin.math.sin
 
 class FlickGestureListener(
     context: Context,
     private val contentHeightProvider: ContentSizeProvider,
-    private val flickCallbacks: FlickCallbacks
+    private val flickCallbacks: FlickCallbacks,
+    private val rotationEnabled: Boolean = true
 ) : View.OnTouchListener {
 
   private val viewConfiguration: ViewConfiguration = ViewConfiguration.get(context)
@@ -147,11 +152,13 @@ class FlickGestureListener(
 
           view.parent.requestDisallowInterceptTouchEvent(true)
 
-          // Rotate the content because. The idea is that we naturally
+          // Rotate the content. The idea is that we naturally
           // make drags in a circular path while holding our phones.
-          val moveRatioDelta = deltaY / view.height * (if (touchStartedOnLeftSide) -20F else 20F)
-          view.pivotY = 0f
-          view.rotation = view.rotation + moveRatioDelta
+          if (rotationEnabled) {
+            val moveRatioDelta = deltaY / view.height * (if (touchStartedOnLeftSide) -20F else 20F)
+            view.pivotY = 0f
+            view.rotation += moveRatioDelta
+          }
 
           dispatchOnPhotoMoveCallback(view)
 
@@ -191,13 +198,16 @@ class FlickGestureListener(
   }
 
   private fun animateDismissal(view: View, downwards: Boolean, flickAnimDuration: Long) {
-    if (view.pivotY != 0f) {
-      throw AssertionError("Formula used for calculating distance rotated only works if the pivot is at (x,0")
+    val distanceRotated = if (rotationEnabled) {
+      if (view.pivotY != 0f) {
+        throw AssertionError("Formula used for calculating distance rotated only works if the pivot is at (x,0)")
+      }
+      // I no longer remember the reason behind applying so many Math functions. Help.
+      ceil(abs(sin(toRadians(view.rotation.toDouble())) * view.width / 2)).toInt()
+    } else {
+      0
     }
 
-    // I no longer remember the reason behind applying so many Math functions. Help.
-    val rotationAngle = view.rotation
-    val distanceRotated = Math.ceil(Math.abs(Math.sin(Math.toRadians(rotationAngle.toDouble())) * view.width / 2)).toInt()
     val throwDistance = distanceRotated + Math.max(contentHeightProvider.heightForDismissAnimation(), view.rootView.height)
 
     view.animate().cancel()
