@@ -5,7 +5,7 @@
 Flick is a tiny library for flick dismissing images (or anything actually). You can read the announcement [blog post](http://saket.me/?p=707) to learn how Flick was created.
 
 ```
-implementation 'me.saket:flick:1.4.0'
+implementation 'me.saket:flick:1.5.0'
 ```
 
 ## Usage
@@ -28,8 +28,8 @@ Flick requires you to manually provide the content dimensions instead of it rely
 ```kotlin
 val callbacks = object : FlickCallbacks {
   override fun onFlickDismiss(animationDuration: Long) {
-    // Called when the View has been flicked and the Activity
-    // should be dismissed.
+    // Called when the View has been flicked
+    // and the Activity should be dismissed.
     flickDismissLayout.postDelayed({ finish() }, animationDuration)
   }
 
@@ -40,18 +40,16 @@ val callbacks = object : FlickCallbacks {
 }
 
 val contentSizeProvider = object : ContentSizeProvider {
-  override fun heightForDismissAnimation(): Int {
-    return imageView.zoomedImageHeight.toInt()
-  }
+  override fun heightForDismissAnimation(): Int =
+    imageView.zoomedImageHeight()
 
-  override fun heightForCalculatingDismissThreshold(): Int {
+  override fun heightForCalculatingDismissThreshold(): Int =
     // Zoomed in height minus the portions of image that has gone
     // outside display bounds, because they are longer visible.
-    imageView.visibleZoomedImageHeight
-  }
+    imageView.visibleZoomedImageHeight()
 }
 
-val flickDismissLayout: FlickDismissLayout = findViewById(...)
+val flickDismissLayout = findViewById<FlickDismissLayout>(...)
 flickDismissLayout.gestureListener = FlickGestureListener(context, contentSizeProvider, callbacks)
 ```
 
