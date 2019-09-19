@@ -12,13 +12,20 @@ import me.saket.flick.InterceptResult.INTERCEPTED
 import java.lang.Math.toRadians
 import kotlin.math.abs
 import kotlin.math.ceil
+import kotlin.math.max
 import kotlin.math.sin
 
+/**
+ * @param rotationEnabled when enabled, the flick dismissible View is rotated by small angles
+ * as its being moved around, in the direction of the gesture. A good example of when this
+ * can be disabled is using shared element Activity transitions, that for some reason don't
+ * support rotations.
+ */
 class FlickGestureListener(
-    context: Context,
-    private val contentHeightProvider: ContentSizeProvider,
-    private val flickCallbacks: FlickCallbacks,
-    private val rotationEnabled: Boolean = true
+  context: Context,
+  private val contentHeightProvider: ContentSizeProvider,
+  private val flickCallbacks: FlickCallbacks,
+  private val rotationEnabled: Boolean = true
 ) : View.OnTouchListener {
 
   private val viewConfiguration: ViewConfiguration = ViewConfiguration.get(context)
@@ -106,7 +113,8 @@ class FlickGestureListener(
 
             if (yVelocityAbs > requiredYVelocity
                 && distanceYAbs >= minSwipeDistanceForFling
-                && yVelocityAbs < maximumFlingVelocity) {
+                && yVelocityAbs < maximumFlingVelocity
+            ) {
               // Flick detected!
               animateDismissal(view, wasSwipedDownwards, 100)
 
@@ -200,7 +208,9 @@ class FlickGestureListener(
   private fun animateDismissal(view: View, downwards: Boolean, flickAnimDuration: Long) {
     val distanceRotated = if (rotationEnabled) {
       if (view.pivotY != 0f) {
-        throw AssertionError("Formula used for calculating distance rotated only works if the pivot is at (x,0)")
+        throw AssertionError(
+            "Formula used for calculating distance rotated only works if the pivot is at (x,0)"
+        )
       }
       // I no longer remember the reason behind applying so many Math functions. Help.
       ceil(abs(sin(toRadians(view.rotation.toDouble())) * view.width / 2)).toInt()
@@ -208,7 +218,7 @@ class FlickGestureListener(
       0
     }
 
-    val throwDistance = distanceRotated + Math.max(contentHeightProvider.heightForDismissAnimation(), view.rootView.height)
+    val throwDistance = distanceRotated + max(contentHeightProvider.heightForDismissAnimation(), view.rootView.height)
 
     view.animate().cancel()
     view.animate()
