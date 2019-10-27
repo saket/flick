@@ -5,7 +5,7 @@
 Flick is a tiny library for flick dismissing images (or anything actually). You can read the announcement [blog post](http://saket.me/?p=707) to learn how Flick was created.
 
 ```
-implementation 'me.saket:flick:1.5.0'
+implementation 'me.saket:flick:1.6.0'
 ```
 
 ## Usage
@@ -44,8 +44,8 @@ val contentSizeProvider = object : ContentSizeProvider {
     imageView.zoomedImageHeight()
 
   override fun heightForCalculatingDismissThreshold(): Int =
-    // Zoomed in height minus the portions of image that has gone
-    // outside display bounds, because they are longer visible.
+    // Zoomed in height minus the portion of image that has gone
+    // outside display bounds, because they are no longer visible.
     imageView.visibleZoomedImageHeight()
 }
 
