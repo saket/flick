@@ -1,6 +1,6 @@
 package me.saket.flick
 
-import android.support.annotation.FloatRange
+import androidx.annotation.FloatRange
 
 interface FlickCallbacks {
 

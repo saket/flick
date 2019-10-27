@@ -3,7 +3,7 @@ package me.saket.flick.sample.viewer.immersive;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 /**
  * Copied from: https://gist.github.com/chrisbanes/73de18faffca571f7292.

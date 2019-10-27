@@ -1,9 +1,9 @@
 package me.saket.flick.sample.gallery
 
 import android.os.Bundle
-import android.support.annotation.IdRes
-import android.support.v7.app.AppCompatActivity
 import android.widget.ImageView
+import androidx.annotation.IdRes
+import androidx.appcompat.app.AppCompatActivity
 import com.squareup.picasso.Picasso
 import me.saket.flick.sample.R
 import me.saket.flick.sample.UnsplashPhoto
