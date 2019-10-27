@@ -2,12 +2,12 @@ package me.saket.flick
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.support.annotation.FloatRange
-import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.view.View
 import android.view.ViewConfiguration
+import androidx.annotation.FloatRange
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import me.saket.flick.InterceptResult.INTERCEPTED
 import java.lang.Math.toRadians
 import kotlin.math.abs

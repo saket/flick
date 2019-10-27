@@ -3,7 +3,7 @@ package me.saket.flick.sample.viewer
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 import com.squareup.picasso.Transformation
 
 /** Adds a solid padding around an image. */
