@@ -27,29 +27,18 @@ Flick requires you to manually provide the content dimensions instead of it rely
 
 ```kotlin
 val callbacks = object : FlickCallbacks {
-  override fun onFlickDismiss(animationDuration: Long) {
-    // Called when the View has been flicked
-    // and the Activity should be dismissed.
-    flickDismissLayout.postDelayed({ finish() }, animationDuration)
-  }
-
   override fun onMove(@FloatRange(from = -1.0, to = 1.0) moveRatio: Float) {
-    // Called while this View is being moved around. Updating
+    // The content is being moved around. Updating the
     // background dimming is a good usecase for this callback.
   }
+
+  override fun onFlickDismiss(animationDuration: Long) {
+    // The content was been flicked and the Activity should
+    // be dismissed once the flick animation is complete.
+    flickDismissLayout.postDelayed({ finish() }, animationDuration)
+  }
 }
-
-val contentSizeProvider = object : ContentSizeProvider {
-  override fun heightForDismissAnimation(): Int =
-    imageView.zoomedImageHeight()
-
-  override fun heightForCalculatingDismissThreshold(): Int =
-    // Zoomed in height minus the portion of image that has gone
-    // outside display bounds, because they are no longer visible.
-    imageView.visibleZoomedImageHeight()
-}
-
-val flickDismissLayout = findViewById<FlickDismissLayout>(...)
+val contentSizeProvider = ContentSizeProvider2 { imageView.zoomedImageHeight() },
 flickDismissLayout.gestureListener = FlickGestureListener(context, contentSizeProvider, callbacks)
 ```
 

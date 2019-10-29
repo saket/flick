@@ -21,12 +21,37 @@ import kotlin.math.sin
  * can be disabled is using shared element Activity transitions, that for some reason don't
  * support rotations.
  */
-class FlickGestureListener(
+class FlickGestureListener private constructor(
   context: Context,
-  private val contentHeightProvider: ContentSizeProvider,
+  private val contentSizeProvider: ContentSizeProviderCompat,
   private val flickCallbacks: FlickCallbacks,
   private val rotationEnabled: Boolean = true
 ) : View.OnTouchListener {
+
+  constructor(
+    context: Context,
+    contentSizeProvider: ContentSizeProvider2,
+    flickCallbacks: FlickCallbacks,
+    rotationEnabled: Boolean = true
+  ): this(
+      context,
+      ContentSizeProviderCompat.v2(contentSizeProvider),
+      flickCallbacks,
+      rotationEnabled
+  )
+
+  @Deprecated("Use ContentSizeProvider2 instead of ContentSizeProvider")
+  constructor(
+    context: Context,
+    contentHeightProvider: ContentSizeProvider,
+    flickCallbacks: FlickCallbacks,
+    rotationEnabled: Boolean = true
+  ) : this(
+      context,
+      ContentSizeProviderCompat.v1(contentHeightProvider),
+      flickCallbacks,
+      rotationEnabled
+  )
 
   private val viewConfiguration: ViewConfiguration = ViewConfiguration.get(context)
 
@@ -98,7 +123,7 @@ class FlickGestureListener(
 
       MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
         if (verticalScrollRegistered) {
-          val flickRegistered = hasFingerMovedEnoughToFlick(distanceYAbs)
+          val flickRegistered = hasFingerMovedEnoughToFlick(view, distanceYAbs)
           val wasSwipedDownwards = distanceY > 0
 
           if (flickRegistered) {
@@ -218,7 +243,7 @@ class FlickGestureListener(
       0
     }
 
-    val throwDistance = distanceRotated + max(contentHeightProvider.heightForDismissAnimation(), view.rootView.height)
+    val throwDistance = distanceRotated + max(contentSizeProvider.heightForDismissAnimation(), view.rootView.height)
 
     view.animate().cancel()
     view.animate()
@@ -230,16 +255,17 @@ class FlickGestureListener(
         .start()
   }
 
-  private fun hasFingerMovedEnoughToFlick(distanceYAbs: Float): Boolean {
-    val thresholdDistanceY = contentHeightProvider.heightForCalculatingDismissThreshold() * flickThresholdSlop
+  private fun hasFingerMovedEnoughToFlick(layout: View, distanceYAbs: Float): Boolean {
+    require(layout is FlickDismissLayout)
+    val visibleContentHeight = contentSizeProvider
+        .heightForCalculatingDismissThreshold(maxHeight = { layout.height })
+    val thresholdDistanceY = visibleContentHeight * flickThresholdSlop
     return distanceYAbs > thresholdDistanceY
   }
 
   companion object {
-
     @JvmField
     val ANIM_INTERPOLATOR = FastOutSlowInInterpolator()
-
     const val DEFAULT_FLICK_THRESHOLD = 0.3f
   }
 }

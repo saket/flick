@@ -6,6 +6,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.TypedValue
+import android.util.TypedValue.COMPLEX_UNIT_DIP
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -14,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.squareup.picasso.Picasso
 import kotterknife.bindView
-import me.saket.flick.ContentSizeProvider
+import me.saket.flick.ContentSizeProvider2
 import me.saket.flick.FlickCallbacks
 import me.saket.flick.FlickDismissLayout
 import me.saket.flick.FlickGestureListener
@@ -22,6 +24,7 @@ import me.saket.flick.InterceptResult
 import me.saket.flick.sample.R
 import me.saket.flick.sample.UnsplashPhoto
 import me.saket.flick.sample.viewer.immersive.SystemUiHelper
+import kotlin.math.abs
 
 class ImageViewerActivity : AppCompatActivity() {
 
@@ -31,7 +34,7 @@ class ImageViewerActivity : AppCompatActivity() {
     }
 
     fun unsplashPhoto(intent: Intent): UnsplashPhoto {
-      return intent.getParcelableExtra("photo")
+      return intent.getParcelableExtra("photo")!!
     }
   }
 
@@ -98,32 +101,18 @@ class ImageViewerActivity : AppCompatActivity() {
   }
 
   private fun flickGestureListener(): FlickGestureListener {
-    val contentHeightProvider = object : ContentSizeProvider {
-      override fun heightForDismissAnimation(): Int {
-        return imageView.zoomedImageHeight.toInt()
-      }
+    val callbacks = FlickCallbacks(
+        onMove = { moveRatio -> updateBackgroundDimmingAlpha(abs(moveRatio)) },
+        onFlickDismiss = { flickAnimDuration -> finishInMillis(flickAnimDuration) }
+    )
 
-      // A positive height value is important so that the user
-      // can dismiss even while the progress indicator is visible.
-      override fun heightForCalculatingDismissThreshold(): Int {
-        return when {
-          imageView.drawable == null -> resources.getDimensionPixelSize(R.dimen.mediaalbumviewer_image_height_when_empty)
-          else -> imageView.visibleZoomedImageHeight.toInt()
-        }
-      }
+    val contentSizeProvider = ContentSizeProvider2 {
+      // A non-zero height is important so that the user can dismiss even
+      // the image is unavailable and the progress indicator is visible.
+      maxOf(dip(240), imageView.zoomedImageHeight.toInt())
     }
 
-    val callbacks = object : FlickCallbacks {
-      override fun onFlickDismiss(flickAnimationDuration: Long) {
-        finishInMillis(flickAnimationDuration)
-      }
-
-      override fun onMove(@FloatRange(from = -1.0, to = 1.0) moveRatio: Float) {
-        updateBackgroundDimmingAlpha(Math.abs(moveRatio))
-      }
-    }
-
-    val gestureListener = FlickGestureListener(this, contentHeightProvider, callbacks)
+    val gestureListener = FlickGestureListener(this, contentSizeProvider, callbacks)
 
     // Block flick gestures if the image can pan further.
     gestureListener.gestureInterceptor = { scrollY ->
@@ -178,7 +167,15 @@ class ImageViewerActivity : AppCompatActivity() {
   private fun updateBackgroundDimmingAlpha(@FloatRange(from = 0.0, to = 1.0) transparencyFactor: Float) {
     // Increase dimming exponentially so that the background is
     // fully transparent while the image has been moved by half.
-    val dimming = 1f - Math.min(1f, transparencyFactor * 2)
+    val dimming = 1f - 1f.coerceAtMost(transparencyFactor * 2)
     activityBackgroundDrawable.alpha = (dimming * 255).toInt()
   }
+}
+
+private fun Context.dip(units: Int): Int {
+  return TypedValue.applyDimension(
+      COMPLEX_UNIT_DIP,
+      units.toFloat(),
+      resources.displayMetrics
+  ).toInt()
 }
