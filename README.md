@@ -5,7 +5,7 @@
 Flick is a tiny library for flick dismissing images (or anything actually). You can read the announcement [blog post](http://saket.me/?p=707) to learn how Flick was created.
 
 ```
-implementation 'me.saket:flick:1.6.0'
+implementation 'me.saket:flick:1.7.0'
 ```
 
 ## Usage
