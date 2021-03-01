@@ -7,7 +7,8 @@ import android.view.MotionEvent
 import android.widget.FrameLayout
 
 /** A ViewGroup that can be dismissed by flicking it vertically. */
-class FlickDismissLayout(context: Context, attrs: AttributeSet) : FrameLayout(context, attrs) {
+open class FlickDismissLayout(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
+  constructor(context: Context) : this(context, null)
 
   var gestureListener: FlickGestureListener? = null
 
