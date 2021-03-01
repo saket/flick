@@ -25,6 +25,11 @@ open class FlickDismissLayout(context: Context, attrs: AttributeSet?) : FrameLay
     return true
   }
 
+  // These two functions are often used in combination by widgets (e.g., BaseSlider
+  // in material components) to find out if they're inside a scrollable parent.
+  override fun canScrollVertically(direction: Int): Boolean = true
+  override fun shouldDelayChildPressedState(): Boolean = true
+
   private fun requireGestureListener(): FlickGestureListener {
     if (gestureListener == null) {
       throw AssertionError("Did you forget to set gestureListener?")
