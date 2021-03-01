@@ -1,6 +1,12 @@
 package me.saket.flick
 
 /**
+ * Usage:
+ *
+ * ```
+ * ContentSizeProvider2 { imageView.height * imageView.zoom }
+ * ```
+ *
  * @param scaledHeight Height of the content with its scale taken
  * into account if, for e.g., it's zoomable.
  */
