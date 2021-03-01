@@ -113,6 +113,13 @@ class FlickGestureListener private constructor(
 
     when (event.action) {
       MotionEvent.ACTION_DOWN -> {
+        // Clean up state from a previous gesture. This can't be done in ACTION_UP or ACTION_CANCEL
+        // because they don't get called if a child calls requestDisallowInterceptTouchEvent().
+        velocityTracker?.recycle()
+        verticalScrollRegistered = false
+        gestureInterceptedUntilNextTouchDown = false
+        gestureCanceledUntilNextTouchDown = false
+
         downX = touchX
         downY = touchY
         touchStartedOnLeftSide = touchX < view.width / 2
@@ -149,11 +156,6 @@ class FlickGestureListener private constructor(
             }
           }
         }
-
-        velocityTracker!!.recycle()
-        verticalScrollRegistered = false
-        gestureInterceptedUntilNextTouchDown = false
-        gestureCanceledUntilNextTouchDown = false
         return false
       }
 
@@ -257,8 +259,7 @@ class FlickGestureListener private constructor(
 
   private fun hasFingerMovedEnoughToFlick(layout: View, distanceYAbs: Float): Boolean {
     require(layout is FlickDismissLayout)
-    val visibleContentHeight = contentSizeProvider
-        .heightForCalculatingDismissThreshold(maxHeight = { layout.height })
+    val visibleContentHeight = contentSizeProvider.heightForCalculatingDismissThreshold(maxHeight = { layout.height })
     val thresholdDistanceY = visibleContentHeight * flickThresholdSlop
     return distanceYAbs > thresholdDistanceY
   }
