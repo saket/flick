@@ -3,7 +3,7 @@ buildscript {
       minSdk    : 21,
       compileSdk: 29,
       timber    : '4.7.0',
-      kotlin    : '1.3.50',
+      kotlin    : '1.4.10',
       dokka     : '0.9.17',
   ]
 
