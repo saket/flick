@@ -19,10 +19,7 @@ open class FlickDismissLayout(context: Context, attrs: AttributeSet?) : FrameLay
 
   @SuppressLint("ClickableViewAccessibility")
   override fun onTouchEvent(event: MotionEvent): Boolean {
-    requireGestureListener().onTouch(this, event)
-    // Defaulting to true to avoid letting parent ViewGroup receive any
-    // touch events. I don't remember why I added this behavior.
-    return true
+    return requireGestureListener().onTouch(this, event)
   }
 
   // These two functions are often used in combination by widgets (e.g., BaseSlider
