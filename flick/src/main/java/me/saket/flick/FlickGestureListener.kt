@@ -180,6 +180,9 @@ class FlickGestureListener private constructor(
         }
 
         if (verticalScrollRegistered || isScrollingVertically) {
+          if (verticalScrollRegistered.not()) {
+            flickCallbacks.onMoveStart()
+          }
           verticalScrollRegistered = true
 
           view.translationX = view.translationX + deltaX
